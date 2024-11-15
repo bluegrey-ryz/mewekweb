@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="./resources/ol.css">
+        <link rel="stylesheet" href="resources/fontawesome-all.min.css">
+        <link rel="stylesheet" type="text/css" href="resources/horsey.min.css">
+        <link rel="stylesheet" type="text/css" href="resources/ol3-search-layer.min.css">
+        <link href="resources/ol-geocoder.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
+        <link rel="stylesheet" href="./resources/qgis2web.css">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+        <title>
+        Website Kelurahan Mewek
+        </title>
+        <script src="https://cdn.tailwindcss.com">
+        </script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&amp;family=Lora:wght@400;700&amp;display=swap" rel="stylesheet"/>
+        <style>
+            body {
+            font-family: 'Lora', serif;
+        }
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+       
+            #map {
+                width: 100%;
+                height: 500px;
+                border: 2px solid #ddd;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                margin-top: 20px;
+            }
+        
+            .map-container {
+                width: 80%;
+                margin: 30px auto;
+                padding: 15px;
+                background-color: #fff;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .ol-control > * {
+                background-color: #f8f8f8!important;
+                color: #444444!important;
+                border-radius: 0px;
+            }
+
+            .ol-attribution a, .gcd-gl-input::placeholder, .search-layer-input-search::placeholder {
+                color: #444444!important;
+            }
+
+            .search-layer-input-search {
+                background-color: #f8f8f8!important;
+            }
+
+            .ol-control > *:focus, .ol-control >*:hover {
+                background-color: rgba(248, 248, 248, 0.7)!important;
+            } 
+
+            .ol-control {
+                background-color: rgba(255,255,255,.4) !important;
+                padding: 2px !important;
+            }
+            .profildesa {
+                padding: 20px;
+                font-size: 14px;
+                line-height: 1.6;
+                background-color: #fff;
+                margin: 20px auto;
+                max-width: 800px;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                text-align: justify;
+            }
+            .description {
+                padding: 20px;
+                font-size: 14px;
+                line-height: 1.6;
+                background-color: #d8d3d3;
+                margin: 20px auto;
+                max-width: 800px;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                text-align: justify;
+            }
+            .about {
+                padding: 20px;
+                font-size: 14px;
+                color: white;
+                line-height: 1.6;
+                background-color: #1db095;
+                margin: 20px auto;
+                max-width: 800px;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                text-align: justify;
+            }
+        </style>
+
+        <title>Peta Kelurahan Mewek</title>
+    </head>
+    <body class="bg-gray-100">
+  <!-- Toggle Button -->
+  <div class="fixed top-4 right-4">
+   <button class="bg-gray-300 text-gray-800 p-2 rounded" id="theme-toggle">
+    <i class="fas fa-moon"></i>
+   </button>
+  </div>
+  <!-- Navbar -->
+  <nav class="bg-gray-300 fixed w-full z-10 top-0 shadow">
+   <div class="container mx-auto flex justify-between items-center p-4">
+    <a class="text-gray-800 text-2xl font-bold" href="#">
+     <i class="fas fa-home"></i> Kelurahan Mewek 
+    </a>
+    <ul class="flex space-x-4">
+     <li>
+      <a class="text-brown-800 hover:text-teal-600" href="#profil">
+       <i class="fas fa-home"></i> Profil
+      </a>
+     </li>
+     
+     <li>
+      <a class="text-brown-800 hover:text-teal-600" href="#visimisi">
+       <i class="fas fa-bullseye"></i> Visi-Misi
+      </a>
+     </li>
+     <li>
+      <a class="text-brown-800 hover:text-teal-600" href="#peta">
+       <i class="fas fa-map"></i> Peta
+      </a>
+     </li>
+     <li>
+        <a class="text-brown-800 hover:text-teal-600" href="#tentang">
+         <i class="fas fa-info-circle"></i> Tentang
+        </a>
+       </li>
+    </ul>
+   </div>
+  </nav>
+  <!-- Hero Section -->
+  <section class="bg-cover bg-center h-96 mt-16" style="background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiYIrFqWXM0A7DHPvdruj_lBNM6lCvPW1D27pn-Lkdexeaxv5ZFmjCkpuz1XBNmtmcTtvtcqqoaxKydgh7GQBD1gsoZ6YzwNhYvZG495-d-Nw5uf6lvZ4cdJ2LSV1vT2qvRF72oBy-cNNoG/s1600/1.jpg');">
+   <div class="bg-black bg-opacity-50 h-full flex items-center justify-center">
+    <div class="text-center text-white">
+     <h1 class="text-4xl font-bold">
+      Selamat Datang di Kelurahan Mewek
+     </h1>
+     <p class="mt-4 text-lg">
+     Kecamatan Kalimanah, Kabupaten Purbalingga
+     </p>
+   
+    </div>
+   </div>
+  </section>
+  <!-- Profil Kelurahan Section -->
+  <section class="py-12 bg-ivory" id="profil">
+   <div class="container mx-auto text-center">
+    <h2 class="text-3xl font-bold-underline mb-6 text-gray-800">
+     Profil Kelurahan
+    </h2>
+   
+     <div class="profildesa">
+      <p class="text-brown-800">
+        Kelurahan Mewek adalah salah satu kelurahan yang terletak di Kecamatan Kalimanah, Kabupaten Purbalingga. Nama "Mewek" 
+        berasal dari kata dalam bahasa Jawa yang berarti menangis, yang mengacu pada sejarah kelurahan ini yang penuh dengan
+         cerita-cerita sedih pada masa lalu. Meskipun memiliki latar belakang sejarah yang melankolis, Kelurahan Mewek kini
+          berkembang menjadi salah satu wilayah yang strategis di sisi barat daya Kota Purbalingga. Kelurahan ini menawarkan 
+          berbagai fasilitas umum yang memadai, seperti akses jalan yang baik dan jaringan transportasi yang mendukung mobilitas
+           warganya. Di samping itu, Kelurahan Mewek juga dikenal dengan lingkungan yang asri dan banyak lahan hijau yang 
+           mendukung sektor pertanian lokal. Selain itu, wilayah ini mengalami modernisasi yang pesat, dengan hadirnya 
+           beberapa perusahaan besar yang memberikan peluang kerja bagi penduduk setempat dan mendukung perekonomian daerah. 
+           Kelurahan Mewek tidak hanya dikenal karena potensi alamnya, tetapi juga karena keberhasilannya dalam mengimbangi 
+           kemajuan dengan kearifan lokal yang tetap dijaga, seperti kegiatan budaya dan gotong-royong yang masih aktif di
+            masyarakat.</p>
+       
+      
+          <br>Telusuri asal usul nama kelurahan mewek: <a href="https://www.arifsae.com/2020/12/asal-usul-nama-desa-mewek.html" target="_blank">https://www.arifsae.com/2020/12/asal-usul-nama-desa-mewek.html</a>
+
+     </div>
+          <div>
+    <h2 class="text-2xl font-bold-underline mb-6 text-gray-800">
+        Detail Data Kelurahan Mewek
+       </h2>
+       <div class="description">
+    <p>Mewek adalah kelurahan di kecamatan Kalimanah, Purbalingga, Jawa Tengah, Indonesia dengan ketinggian 40 meter di atas permukaan laut. Jarak Kelurahan Mewek menuju ibu kota Kabupaten yaitu 7,80 km. Jumlah satuan lingkungan setempat di Kelurahan Mewek terdiri dari 3 Rukun Warga dan 9 Rukun Tetangga. Jumlah penduduk terdiri dari 1060 laki-laki dan 1053 perempuan dengan sex ratio 100,66% serta terdiri dari 573 rumah tangga. Jumlah penduduk menurut agama dan kepercayaan terdiri dari 2073 Islam, 6 Katolik, 26 Protestan, 3 Budha dan 5 Kepercayaan. Lembaga pendidikan di Kelurahan Mewek terdiri dari 1 PAUD, 1 TK PGRI dan 1 SD Negeri.</p>
+<br> Sumber :<a href="=https://id.wikipedia.org/wiki/Mewek,_Kalimanah,_Purbalingga" target="_blank">https://id.wikipedia.org/wiki/Mewek,_Kalimanah,_Purbalingga</a>      
+</div>
+       
+
+  
+  </section>
+  <!-- Visi-Misi Section -->
+  <section class="py-12 bg-teal-600 text-white" id="visimisi">
+   <div class="container mx-auto text-center" >
+    <h2 class="text-3xl font-bold mb-6">
+     Visi dan Misi
+    </h2>
+    <div class="grid grid-cols-2 gap-4">
+     <div class="p-6 rounded shadow bg-teal-700">
+      <i class="fas fa-bullseye text-4xl mb-4">
+      </i>
+      <h3 class="text-xl font-bold mb-2">
+       Visi
+      </h3>
+      <p>
+       Menjadi Kelurahan yang maju, mandiri, dan sejahtera dengan tetap menjaga nilai-nilai budaya dan lingkungan.
+      </p>
+     </div>
+     <div class="p-6 rounded shadow bg-teal-700">
+      <i class="fas fa-tasks text-4xl mb-4">
+      </i>
+      <h3 class="text-xl font-bold mb-2">
+       Misi
+      </h3>
+      <p>
+       Meningkatkan kualitas hidup masyarakat melalui pendidikan, kesehatan, dan ekonomi yang berkelanjutan.
+      </p>
+     </div>
+     <div class="p-6 rounded shadow bg-teal-700">
+      <i class="fas fa-leaf text-4xl mb-4">
+      </i>
+      <h3 class="text-xl font-bold mb-2">
+       Misi
+      </h3>
+      <p>
+       Melestarikan dan mengembangkan budaya lokal serta menjaga kelestarian lingkungan.
+      </p>
+     </div>
+     <div class="p-6 rounded shadow bg-teal-700">
+      <i class="fas fa-users text-4xl mb-4">
+      </i>
+      <h3 class="text-xl font-bold mb-2">
+       Misi
+      </h3>
+      <p>
+       Mendorong partisipasi aktif masyarakat dalam pembangunan Kelurahan.
+      </p>
+     </div>
+    </div>
+   </div>
+  </section>
+ <!-- Peta Kelurahan Section -->
+ <section class="py-12 bg-ivory">
+    <div class="container mx-auto text-center" id="peta">
+     <h2 class="text-3xl font-bold mb-6 text-teal-600">
+      Peta Kelurahan Mewek
+     </h2>
+     <div class="border border-gray-600 p-4">
+      <div id="map">
+          <div id="popup" class="ol-popup">
+              <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+              <div id="popup-content"></div>
+          </div>
+      </div>
+   </section>
+    
+  
+ <!-- Penjelasan Peta Section -->
+ <section class="py-12 bg-ivory">
+    <div class="about" id="tentang">
+     <h2 class="text-3xl font-bold mb-6 text-brown-800">
+      Tentang Peta
+     </h2>
+     <p class="text-brown-800">
+        Peta interaktif Kelurahan Mewek dirancang sebagai sarana visual yang memudahkan pengguna dalam mengeksplorasi wilayah dan fasilitas penting di sekitar kelurahan. 
+        Peta ini memiliki antarmuka yang interaktif, memungkinkan pengguna untuk melakukan zoom, menggeser peta, dan menelusuri wilayah secara mendalam, dengan fokus pada
+         penyediaan informasi geografis serta landmark utama, seperti batas wilayah, lokasi fasilitas umum, dan infrastruktur penting. Setiap elemen dalam peta, seperti batas
+          administratif, sungai, jalan, bangunan, fasilitas umum, dan area pertanian, diatur dalam layer terpisah agar pengguna dapat memilih informasi spesifik yang diinginkan.
+           Selain itu, setiap ikon atau area pada peta dapat diklik untuk menampilkan popup informasi terkait, seperti nama fasilitas, jenis bangunan, atau rincian lainnya yang
+            memberikan gambaran komprehensif tanpa harus keluar dari peta. Peta ini juga dilengkapi dengan fitur pencarian, memungkinkan pengguna untuk mencari lokasi tertentu dengan 
+            cepat dan navigasi layer switcher yang memungkinkan pengguna mengaktifkan atau menonaktifkan layer tertentu sesuai kebutuhan, misalnya hanya menampilkan jalan dan batas Kelurahan 
+            tanpa fasilitas umum. Desain peta yang minimalis dan estetis menggunakan warna-warna netral untuk menghindari kebingungan, serta sudah dioptimalkan agar bisa diakses melalui 
+            perangkat mobile, memudahkan warga maupun pengunjung untuk menggunakan peta ini di berbagai perangkat. Lebih dari sekadar alat bantu navigasi, peta ini juga mendukung program
+             pembangunan wilayah dan dapat digunakan sebagai alat edukasi serta promosi, menampilkan potensi wilayah seperti area hijau, lokasi industri, dan aksesibilitas yang strategis.
+              Dengan demikian, peta interaktif Kelurahan Mewek ini menjadi sumber informasi yang lengkap dan ramah pengguna bagi warga lokal, pengunjung, maupun calon investor yang tertarik 
+              dengan perkembangan wilayah ini.</p>
+    </div>
+     </p>
+    </div>
+   </section>
+
+
+   
+<!-- Footer -->
+<footer class="bg-gray-600 py-6">
+    <div class="container mx-auto text-center text-white">
+     <p>
+      © 2024 Kelurahan Mewek by Siti Nur Kharisma Akbar
+     </p>
+     <div class="flex justify-center space-x-4 mt-4">
+      <a class="text-gray-300 hover:text-teal-600" href="#">
+       <i class="fab fa-facebook-f">
+       </i>
+      </a>
+      <a class="text-gray-300 hover:text-teal-600" href="#">
+       <i class="fab fa-twitter">
+       </i>
+      </a>
+      <a class="text-gray-300 hover:text-teal-600" href="https://www.instagram.com/kelurahanmewek/">
+       <i class="fab fa-instagram">
+       </i>
+      </a>
+      <a class="text-gray-300 hover:text-teal-600" href="#">
+       <i class="fab fa-linkedin-in">
+       </i>
+      </a>
+     </div>
+    </div>
+   </footer>
+ 
+
+  <!-- Script untuk peta interaktif -->
+
+        <script src="resources/qgis2web_expressions.js"></script>
+<script src="resources/proj4.js"></script>
+        <script>proj4.defs('EPSG:4326','+proj=longlat +datum=WGS84 +no_defs');</script>
+        <script src="./resources/functions.js"></script>
+        <script src="./resources/ol.js"></script>
+        <script src="resources/horsey.min.js"></script>
+        <script src="resources/ol3-search-layer.js"></script>
+        <script src="./resources/ol-layerswitcher.js"></script>
+        <script src="resources/ol-geocoder.js"></script>
+        <script src="layers/ADMINISTRASIDESA_AR_25K_1.js"></script><script src="layers/batasdesa_2.js"></script><script src="layers/ptbangunan_3.js"></script><script src="layers/Mewek_Poly_4.js"></script><script src="layers/Lapangan_5.js"></script><script src="layers/sawah_6.js"></script><script src="layers/warungmakan_7.js"></script><script src="layers/kantor_8.js"></script><script src="layers/shop_9.js"></script><script src="layers/kos_10.js"></script><script src="layers/sekolah_11.js"></script><script src="layers/rumahh_12.js"></script><script src="layers/Makam_13.js"></script><script src="layers/PT_14.js"></script><script src="layers/Religion_15.js"></script><script src="layers/sungai_16.js"></script><script src="layers/Jalandesa_17.js"></script>
+        <script src="styles/ADMINISTRASIDESA_AR_25K_1_style.js"></script><script src="styles/batasdesa_2_style.js"></script><script src="styles/ptbangunan_3_style.js"></script><script src="styles/Mewek_Poly_4_style.js"></script><script src="styles/Lapangan_5_style.js"></script><script src="styles/sawah_6_style.js"></script><script src="styles/warungmakan_7_style.js"></script><script src="styles/kantor_8_style.js"></script><script src="styles/shop_9_style.js"></script><script src="styles/kos_10_style.js"></script><script src="styles/sekolah_11_style.js"></script><script src="styles/rumahh_12_style.js"></script><script src="styles/Makam_13_style.js"></script><script src="styles/PT_14_style.js"></script><script src="styles/Religion_15_style.js"></script><script src="styles/sungai_16_style.js"></script><script src="styles/Jalandesa_17_style.js"></script>
+        <script src="./layers/layers.js" type="text/javascript"></script> 
+        <script src="./resources/Autolinker.min.js"></script>
+        <script src="./resources/qgis2web.js"></script>
+    </body>
+</html>
